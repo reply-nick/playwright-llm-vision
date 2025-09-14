@@ -1,0 +1,25 @@
+# Installing Ollama
+
+Ollama is an open-source AI framework that provides a simple way to run large language models locally. To install Ollama, you can use one of the following methods:
+
+## Using the CLI (Recommended)
+Install Ollama via curl:
+```bash
+curl -L https://ollama.com/install.sh | sh
+```
+For Windows users, download and run the installer from [Ollama's official website](https://ollama.com).
+
+## Using Binary Packages
+Download the appropriate binary package for your OS from the [GitHub releases page](https://github.com/ollamalang/ollama/releases) and follow the installation instructions provided.
+
+## Docker
+If you prefer using Docker, you can pull the Ollama image:
+```bash
+docker pull ollamalang/ollama
+```
+
+
+After installation, ensure Ollama is accessible in your PATH. You can verify the installation by running `ollama --version`.
+
+Once installed, you'll be ready to use Ollama as the backend for image assertions in Playwright.
+```
