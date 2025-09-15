@@ -1,4 +1,4 @@
-# Playwright LLM Vision (Ollama)
+# Playwright LLM Vision (Ollama) 🔎🤖
 
 This project demonstrates how to use Playwright tests together with a local/remote Ollama LLM to analyze page screenshots (vision) and verify visual claims. The example test navigates to a real site, captures a screenshot, asks a vision-capable model to describe it, and verifies a textual claim about the image.
 
@@ -9,7 +9,7 @@ Key pieces:
 
 Note: The helper uses the official ollama Node client.
 
-## Features
+## ✨ Features
 
 - End-to-end browser automation with @playwright/test
 - Vision analysis with Ollama via `src/helpers/OllamaHelper.ts`
@@ -17,16 +17,16 @@ Note: The helper uses the official ollama Node client.
   - verifyImage(image, claim)
 - Attaches the screenshot and model outputs to the Playwright report
 
-## Prerequisites
+## 📦 Prerequisites
 
 - Node.js 18+
 - Browsers for Playwright (Chromium, etc.)
 - Ollama installed and running (local or remote)
-  - See: `src/llm-vision/doc.readme` and `src/helpers/README.md`
+  - See: [src/llm-vision/doc.readme](src/llm-vision/doc.readme)
 - Pulled models (examples):
   - `ollama pull gemma3:latest`
 
-## Install
+## ⚡ Install
 
 1) Install dependencies:
    ```bash 
@@ -39,10 +39,13 @@ Note: The helper uses the official ollama Node client.
    ```
 
 3) Ensure Ollama is installed and running:
-   - Refer to: src/llm-vision/doc.readme
-   - Verify with: ollama --version
+   - Refer to: [src/llm-vision/doc.readme](src/llm-vision/doc.readme)
+   - Verify with: 
+    ```bash
+    ollama --version
+    ```
 
-## Configure Ollama host
+## 🔧 Configure Ollama host
 
 The default Ollama host in src/helpers/OllamaHelper.ts is:
 - http://localhost:11434
@@ -53,7 +56,7 @@ Examples:
 - macOS/Linux: export OLLAMA_HOST=http://127.0.0.1:11434
 - Windows (PowerShell): $env:OLLAMA_HOST="http://127.0.0.1:11434"
 
-## Run the tests
+## ▶️ Run the tests
 
 - Run all tests:
   
@@ -66,7 +69,7 @@ Examples:
   ```bash
   npx playwright show-report
   ```
-## Example
+## 📖 Example
 
 Code:
 ```js
@@ -86,7 +89,7 @@ There is a prominent "GO" button displayed at the center of the screen, clearly 
 
 ```
 
-## Error example
+## ⚠️ Error example
 
 ### Note: The speedtest.net logo is a image not text.
 
@@ -119,14 +122,25 @@ Is the logo with LatencyTest text present on the top left corner?
         at /Users/nicolae/Projects/playwright-llm-vision/src/tests/example.spec.ts:69:58
 ```
 
-## Playwright Report Link
+## 📊 Playwright Reports
+### Note: For the 2 tests in the [src/tests/example.spec.ts](src/tests/example.spec.ts)
+
+### ✅ Pass 
+![pass](playwright-report-for-readme/pass.png)
+
+### ❌ Fail
+![fail](playwright-report-for-readme/fail.png)
 
 
-
-
-## Notes and troubleshooting
+## 🛠️ Notes and troubleshooting
 
 - If the test cannot reach Ollama, check OLLAMA_HOST and that the server is running.
 - Ensure you pulled a vision-capable model (e.g., gemma3:latest) before running vision features.
 - First-time model use may take longer (model loading).
 - Playwright runs with headless: false per `./playwright.config.ts`; change if needed.
+
+
+
+
+
+### 🚨 This is only a proof of concept. 🚨
