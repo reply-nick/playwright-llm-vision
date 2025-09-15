@@ -10,15 +10,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'],
       isMobile: false },
     },
-    {
-      name: 'pixel',
-      use: { ...devices['Pixel 7'],
-      isMobile: true },
-    },
+    // Disabling mobile Browser
+    // {
+    //   name: 'pixel',
+    //   use: { ...devices['Pixel 7'],
+    //   isMobile: true },
+    // },
   ],
   use: {
     headless: false,
-    // viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,
   },
   reporter: [['line'],['html',  { open: 'never' }]],

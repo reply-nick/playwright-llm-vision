@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test -c src/playwright.config.ts",
-    "test:mobile": "playwright test -c src/playwright.config.ts --project=mobileChromium",
-    "test:ui": "playwright test -c src/playwright.config.ts --ui",
+    "test": "playwright test",
+    "test:mobile": "playwright test --project=pixel",
+    "test:ui": "playwright test --ui",
     "test:report": "playwright show-report"
   },
   "keywords": [],

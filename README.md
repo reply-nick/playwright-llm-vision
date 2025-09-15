@@ -3,7 +3,7 @@
 This project demonstrates how to use Playwright tests together with a local/remote Ollama LLM to analyze page screenshots (vision) and verify visual claims. The example test navigates to a real site, captures a screenshot, asks a vision-capable model to describe it, and verifies a textual claim about the image.
 
 Key pieces:
-- Playwright config: `src/playwright.config.ts`
+- Playwright config: `./playwright.config.ts`
 - Example tests: `src/tests/*`
 - Ollama helper: `src/helpers/OllamaHelper.ts`
 
@@ -60,47 +60,68 @@ Examples:
   ```bash 
   npx playwright test
   ```
-  or 
-  ```bash
-  npm run test
-  ```
 
 - Open the HTML report after running:
    
   ```bash
   npx playwright show-report
   ```
-  or
-  ```bash
-  npm run test:report
-  ```
+## Example
 
-## Error Sample
 Code:
 ```js
-  const llmVision = new OllamaHelper(process.env.OLLAMA_HOST)
-  const textAnalysis = await llmVision.verifyImage(screenshot, 'is the title of the page present, and it is `todos`?')
-  expect(textAnalysis.matches, textAnalysis.explanation).toBeTruthy()
+  const goButtonClaim = 'Is the GO button present on the screen?'
+  const goButtonAnalysis = await llmVision.verifyImage(screenshot, goButtonClaim)
+
+  console.log(goButtonClaim, goButtonAnalysis.explanation.trim())
+  expect(goButtonAnalysis.matches, goButtonAnalysis.explanation).toBeTruthy()
+```
+
+Result:
+```
+There is a prominent "GO" button displayed at the center of the screen, clearly indicating its presence. — example.spec.ts:29
+
+  28 |   console.log(goButtonClaim, goButtonAnalysis.explanation.trim())
+  29 |   expect(goButtonAnalysis.matches, goButtonAnalysis.explanation).toBeTruthy()
+
+```
+
+## Error example
+
+### Note: The speedtest.net logo is a image not text.
+
+Code:
+```js
+  const logoClaim = 'Is the logo with LatencyTest text present on the top left corner?'
+  const logoAnalysis = await llmVision.verifyImage(screenshot, logoClaim)
+
+  console.log(logoClaim, logoAnalysis.explanation.trim())
+  expect(logoAnalysis.matches, logoAnalysis.explanation).toBeTruthy()
 ```
 
 Error:
 ```bash
- 1) [pixel] › src/tests/example.spec.ts:4:5 › screenshot analysis with OllamaHelper ───────────────
+[chromium] › src/tests/example.spec.ts:52:5 › Speedtest page logo check
+Is the logo with LatencyTest text present on the top left corner?
+  1) [chromium] › src/tests/example.spec.ts:52:5 › Speedtest page logo check ───────────────────────
 
-    Error: The image clearly shows the title of the page is "Speedtest Performance Directory."
+    Error: The image shows the Speedtest logo, but it does not contain the text "LatencyTest" as described in the claim.
 
     expect(received).toBeTruthy()
 
     Received: false
 
-      26 |   })
-    > 27 |   expect(textAnalysis.matches, textAnalysis.explanation).toBeTruthy();
+      67 |
+      68 |   console.log(logoClaim, logoAnalysis.explanation.trim())
+    > 69 |   expect(logoAnalysis.matches, logoAnalysis.explanation).toBeTruthy()
          |                                                          ^
-      28 | })
-      29 |
-      30 |
-        at /Users/nicolae/Projects/playwright-llm-vision/src/tests/example.spec.ts:27:58
+      70 | })
+        at /Users/nicolae/Projects/playwright-llm-vision/src/tests/example.spec.ts:69:58
 ```
+
+## Playwright Report Link
+
+
 
 
 ## Notes and troubleshooting
@@ -108,16 +129,4 @@ Error:
 - If the test cannot reach Ollama, check OLLAMA_HOST and that the server is running.
 - Ensure you pulled a vision-capable model (e.g., gemma3:latest) before running vision features.
 - First-time model use may take longer (model loading).
-- Playwright runs with headless: false per `src/playwright.config.ts`; change if needed.
-- package.json defines Playwright scripts:
-
-  ```json
-  {
-  "scripts": {
-    "test": "playwright test",
-    "test:mobile": "playwright test --project=pixel",
-    "test:ui": "playwright test --ui",
-    "test:report": "playwright show-report"
-  }
-  }
-  ```
+- Playwright runs with headless: false per `./playwright.config.ts`; change if needed.

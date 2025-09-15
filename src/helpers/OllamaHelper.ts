@@ -3,41 +3,33 @@ import { readFile } from 'node:fs/promises'
 
 type ImageInput = string | Buffer
 
-let singleton: Ollama | null = null
+let ollama: Ollama | null = null
 let currentHost: string | null = null
 
 function getDefaultHost() {
   return process.env.OLLAMA_HOST || 'http://localhost:11434'
 }
 
-/**
- * Get or create an Ollama client (singleton).
- */
 export default class OllamaHelper {
   constructor(host = getDefaultHost()) {
-  if (!singleton || currentHost !== host) {
-    singleton = new Ollama({ host })
+  if (!ollama || currentHost !== host) {
+    ollama = new Ollama({ host })
     currentHost = host
   }
 }
 
   getOllamaClient(): Ollama {
-      if (!singleton) {
-    // Either initialize here:
-    // singleton = new Ollama(/* config */);
-
-    // Or throw to force explicit initialization elsewhere:
-    throw new Error('Ollama client not initialized. Call initOllamaClient() first.');
-  }
-  return singleton;
+    if (!ollama) {
+      throw new Error('Ollama client not initialized. Check config.');
+    }
+  return ollama;
   }
 
-/**
- * Simple text chat helper.
- */
-  async chatText(prompt: string, opts?: { model?: string; host?: string }): Promise<string> {
+// Simple text chat helper.
+  async chatText(prompt: string, opts?: { model?: string; host?: string; prompt?: string }): Promise<string> {
     const client = this.getOllamaClient()
-  const model = opts?.model ?? 'gemma3:4b'
+  const model = opts?.model ?? 'gemma3:latest'
+  const userPrompt = 'You are a expert Software Test Engineer assistant. Given a request, respond exactly.'
   const res = await client.chat({
     model,
     messages: [{ role: 'user', content: prompt }],
@@ -45,10 +37,7 @@ export default class OllamaHelper {
   return res.message.content
 }
 
-/**
- * Describe an image using a vision-capable model.
- * - image: file path, data URL, base64 string, or Buffer
- */
+// Describe an image using a vision-capable model. Image: file path, data URL, base64 string, or Buffer.
   async describeImage(
   image: ImageInput,
   opts?: {
@@ -60,7 +49,8 @@ export default class OllamaHelper {
     const client = this.getOllamaClient()
   const model = opts?.model ?? 'gemma3:latest'
   const base64 = await this.imageToBase64(image)
-  const userPrompt = opts?.prompt ?? 'Describe this image in detail.'
+  const userPrompt = opts?.prompt ?? `You are a expert Software Test Engineer. Describe shortly this image in detail from the Quality Assurance perspective. 
+  Highlight only the problems if present. Limit the response to a list, each item containg at most 10 words. Dont use markdown.`
 
   const res = await client.chat({
     model,
@@ -77,10 +67,9 @@ export default class OllamaHelper {
   return res.message.content
 }
 
-/**
- * Verify whether an image matches a given claim/expectation.
- * Returns a boolean plus a short explanation.
- */
+// Verify whether an image matches a given claim/expectation.
+// Returns a boolean plus a short explanation.
+
   async verifyImage(
   image: ImageInput,
   claim: string,
@@ -96,7 +85,8 @@ export default class OllamaHelper {
       {
         role: 'system',
         content:
-          'You are a strict visual verifier. Given an image and a claim, respond on the first line with "Yes" or "No" only. On the second line, give a one-sentence justification.',
+          `You are a strict visual verifier. Given an image and a claim, respond on the first line with "Yes" or "No" only. 
+          On the second line, give a one-sentence justification. If your response is "No" describe why you think the claim is false.`,
       },
       {
         role: 'user',
@@ -114,13 +104,6 @@ export default class OllamaHelper {
   return { matches, explanation, raw }
 }
 
-/**
- * Convert various image inputs into a base64 string (no data URL prefix).
- * - If a Buffer is provided, encode to base64.
- * - If a string:
- *   - If it's a data URL, strip prefix and return the base64 part.
- *   - Try to read as a file path; if that fails, treat it as a raw base64 string.
- */
   async imageToBase64(input: ImageInput): Promise<string> {
   if (Buffer.isBuffer(input)) return input.toString('base64')
 
@@ -131,12 +114,10 @@ export default class OllamaHelper {
       if (idx === -1) throw new Error('Invalid data URL for image')
       return trimmed.slice(idx + 1)
     }
-    // Try file path
     try {
       const buf = await readFile(trimmed)
       return buf.toString('base64')
     } catch {
-      // Assume already a base64 string
       return trimmed
     }
   }
