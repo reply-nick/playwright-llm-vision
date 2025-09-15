@@ -13,8 +13,9 @@ Note: The helper uses the official ollama Node client.
 
 - End-to-end browser automation with @playwright/test
 - Vision analysis with Ollama via `src/helpers/OllamaHelper.ts`
-  - describeImage(image)
-  - verifyImage(image, claim)
+  - `describeImage(image)`
+  - `verifyImage(image, claim)`
+  - `chatText(prompt)` <- not in use
 - Attaches the screenshot and model outputs to the Playwright report
 
 ## 📦 Prerequisites
@@ -48,13 +49,13 @@ Note: The helper uses the official ollama Node client.
 ## 🔧 Configure Ollama host
 
 The default Ollama host in src/helpers/OllamaHelper.ts is:
-- http://localhost:11434
+- `http://localhost:11434`
 You can override it via environment variable:
-- OLLAMA_HOST=http://127.0.0.1:11434 (or your remote URL)
+- `OLLAMA_HOST=http://127.0.0.1:11434` (or your remote URL)
 
 Examples:
-- macOS/Linux: export OLLAMA_HOST=http://127.0.0.1:11434
-- Windows (PowerShell): $env:OLLAMA_HOST="http://127.0.0.1:11434"
+- macOS/Linux: `export OLLAMA_HOST=http://127.0.0.1:11434`
+- Windows (PowerShell): `$env:OLLAMA_HOST="http://127.0.0.1:11434"`
 
 ## ▶️ Run the tests
 

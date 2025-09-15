@@ -41,7 +41,7 @@ export default class OllamaHelper {
   async describeImage(
   image: ImageInput,
   opts?: {
-    model?: string // e.g. 'gemma3','gemma3:latest' or 'llava'
+    model?: string // e.g. 'gemma3:12b','gemma3:latest' or 'llava'
     host?: string
     prompt?: string
   }
@@ -68,7 +68,7 @@ export default class OllamaHelper {
 }
 
 // Verify whether an image matches a given claim/expectation.
-// Returns a boolean plus a short explanation.
+// Returns a yes/no plus a short explanation.
 
   async verifyImage(
   image: ImageInput,
