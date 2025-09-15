@@ -126,10 +126,10 @@ Is the logo with LatencyTest text present on the top left corner?
 ### Note: For the 2 tests in the [src/tests/example.spec.ts](src/tests/example.spec.ts)
 
 ### ✅ Pass 
-![pass](playwright-report-for-readme/pass.png)
+![pass](images/pass.png)
 
 ### ❌ Fail
-![fail](playwright-report-for-readme/fail.png)
+![fail](images/fail.png)
 
 
 ## 🛠️ Notes and troubleshooting
@@ -143,4 +143,4 @@ Is the logo with LatencyTest text present on the top left corner?
 
 
 
-### 🚨 This is only a proof of concept. 🚨
+## 🚨 Remember: This is only a proof of concept. 🚨
