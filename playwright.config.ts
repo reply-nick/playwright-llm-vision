@@ -9,13 +9,7 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'],
       isMobile: false },
-    },
-    // Disabling mobile Browser
-    // {
-    //   name: 'pixel',
-    //   use: { ...devices['Pixel 7'],
-    //   isMobile: true },
-    // },
+    }
   ],
   use: {
     headless: false,
